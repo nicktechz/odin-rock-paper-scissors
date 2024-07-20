@@ -4,11 +4,6 @@ let computerScore = 0;
 let humanChoice = undefined;
 let computerChoice = undefined;
 
-const getCurrentScore = () => {
-  console.log(`COMPUTER SCORE IS: ${computerScore}`);
-  console.log(`YOUR SCORE IS: ${humanScore}`);
-};
-
 const getHumanChoice = () => {
   let userAnswer = prompt("What is your choice? Rock, Paper or Scissors?");
   let formattedAnswer = userAnswer.toLowerCase();
@@ -26,7 +21,6 @@ const getHumanChoice = () => {
     return getHumanChoice();
   }
 };
-getHumanChoice();
 
 const getComputerChoice = () => {
   const randomNumber = Math.floor(Math.random() * 3);
@@ -42,43 +36,55 @@ const getComputerChoice = () => {
   }
 };
 
-getComputerChoice();
+const getCurrentScore = () => {
+  console.log(`COMPUTER SCORE IS: ${computerScore}`);
+  console.log(`YOUR SCORE IS: ${humanScore}`);
+};
 
-function playRound() {
-  if (humanChoice === "rock" && computerChoice === "rock") {
-    console.log("IT'S A MATCH YOU BOTH CHOICE ROCK");
-    getCurrentScore();
-  } else if (humanChoice === "rock" && computerChoice === "paper") {
-    console.error("YOU LOOSE PAPERS BEATS ROCK!");
-    computerScore++;
-    getCurrentScore();
-  } else if (humanChoice === "rock" && computerChoice === "scissors") {
-    console.log("YOU WIN!! ROCK BEAT SCISSORS");
-    humanScore++;
-    getCurrentScore();
-  } else if (humanChoice === "paper" && computerChoice === "rock") {
-    console.log("YOU WIN!! PAPER BEATS ROCK");
-    humanScore++;
-    getCurrentScore();
-  } else if (humanChoice === "paper" && computerChoice === "paper") {
-    console.log("IT'S A MATCH YOU BOTH CHOICE PAPER");
-    getCurrentScore();
-  } else if (humanChoice === "paper" && computerChoice === "scissors") {
-    console.error("YOU LOOSE!! SCISSORS BEAT PAPER");
-    computerScore++;
-    getCurrentScore();
-  } else if (humanChoice === "scissors" && computerChoice === "rock") {
-    console.error("YOU LOOSE!! ROCK BEATS SCISSORS");
-    computerScore++;
-    getCurrentScore();
-  } else if (humanChoice === "scissors" && computerChoice === "paper") {
-    console.log("YOU WIN!! SCISSORS BEATS PAPER");
-    humanScore++;
-    getCurrentScore();
-  } else if (humanChoice === "scissors" && computerChoice === "scissors") {
-    console.log("IT'S A MATCH YOU BOTH CHOICE PAPER");
-    getCurrentScore();
+function playGame() {
+  function playRound() {
+    getHumanChoice();
+    getComputerChoice();
+    if (humanChoice === "rock" && computerChoice === "rock") {
+      console.log("IT'S A MATCH YOU BOTH CHOICE ROCK");
+      getCurrentScore();
+    } else if (humanChoice === "rock" && computerChoice === "paper") {
+      console.error("YOU LOOSE PAPERS BEATS ROCK!");
+      computerScore++;
+      getCurrentScore();
+    } else if (humanChoice === "rock" && computerChoice === "scissors") {
+      console.log("YOU WIN!! ROCK BEAT SCISSORS");
+      humanScore++;
+      getCurrentScore();
+    } else if (humanChoice === "paper" && computerChoice === "rock") {
+      console.log("YOU WIN!! PAPER BEATS ROCK");
+      humanScore++;
+      getCurrentScore();
+    } else if (humanChoice === "paper" && computerChoice === "paper") {
+      console.log("IT'S A MATCH YOU BOTH CHOICE PAPER");
+      getCurrentScore();
+    } else if (humanChoice === "paper" && computerChoice === "scissors") {
+      console.error("YOU LOOSE!! SCISSORS BEAT PAPER");
+      computerScore++;
+      getCurrentScore();
+    } else if (humanChoice === "scissors" && computerChoice === "rock") {
+      console.error("YOU LOOSE!! ROCK BEATS SCISSORS");
+      computerScore++;
+      getCurrentScore();
+    } else if (humanChoice === "scissors" && computerChoice === "paper") {
+      console.log("YOU WIN!! SCISSORS BEATS PAPER");
+      humanScore++;
+      getCurrentScore();
+    } else if (humanChoice === "scissors" && computerChoice === "scissors") {
+      console.log("IT'S A MATCH YOU BOTH CHOICE PAPER");
+      getCurrentScore();
+    }
   }
+  playRound();
+  playRound();
+  playRound();
+  playRound();
+  playRound();
 }
 
-playRound();
+playGame();
