@@ -3,88 +3,132 @@ let computerScore = 0;
 
 let humanChoice = undefined;
 let computerChoice = undefined;
+let numberOfRounds = 0;
 
-const getHumanChoice = () => {
-  let userAnswer = prompt("What is your choice? Rock, Paper or Scissors?");
-  let formattedAnswer = userAnswer.toLowerCase();
-  if (formattedAnswer === "rock") {
-    humanChoice = "rock";
-    console.log(`Human choice is: ${humanChoice}`);
-  } else if (formattedAnswer === "paper") {
-    humanChoice = "paper";
-    console.log(`Human choice is: ${humanChoice}`);
-  } else if (formattedAnswer === "scissors") {
-    humanChoice = "scissors";
-    console.log(`Human choice is: ${humanChoice}`);
+// DEFINIR DOM
+const rockBtn = document.getElementById("rock");
+const paperBtn = document.getElementById("paper");
+const scissorsBtn = document.getElementById("scissors");
+const imgPlayerOne = document.getElementById("imgPlayerOne");
+const imgPlayerTwo = document.getElementById("imgPlayerTwo");
+const computerText = document.getElementById("computerText");
+const annoucementTitle = document.getElementById("announcementTitle");
+const scorePlayerOne = document.getElementById("playerOneScore");
+const scorePlayerTwo = document.getElementById("playerTwoScore");
+
+rockBtn.addEventListener("click", () => {
+  imgPlayerOne.src = "./img/rock.png";
+  humanChoice = "rock";
+  getComputerChoice();
+  checkWinner();
+});
+
+paperBtn.addEventListener("click", () => {
+  imgPlayerOne.src = "./img/paper.png";
+  humanChoice = "paper";
+  getComputerChoice();
+  checkWinner();
+});
+
+scissorsBtn.addEventListener("click", () => {
+  imgPlayerOne.src = "./img/scissors.png";
+  humanChoice = "scissors";
+  getComputerChoice();
+  checkWinner();
+});
+
+const nextStep = () => {
+  if (humanScore === 5) {
+    imgPlayerOne.src = "./img/thanks.png";
+    imgPlayerTwo.src = "./img/thanks.png";
+    annoucementTitle.textContent = "YOU WIN THIS ROUND";
+    annoucementTitle.style.backgroundColor = "blue";
+    computerText.textContent = "To play again restart the page";
+    disabledBtns();
+  } else if (computerScore === 5) {
+    imgPlayerOne.src = "./img/thanks.png";
+    imgPlayerTwo.src = "./img/thanks.png";
+    annoucementTitle.textContent = "WE WIN THIS ROUND";
+    annoucementTitle.style.backgroundColor = "blue";
+    computerText.textContent = "To play again restart the page";
+    disabledBtns();
   } else {
-    alert("INVALID ANSWER, LET'S TRY IT AGAIN:");
-    return getHumanChoice();
+    setTimeout(() => {
+      imgPlayerOne.src = "./img/loading.gif";
+      imgPlayerTwo.src = "./img/loading.gif";
+      annoucementTitle.textContent = "A NEW TRY";
+      annoucementTitle.style.backgroundColor = "blue";
+      computerText.textContent = "Waiting for you...";
+    }, 1000);
   }
 };
 
 const getComputerChoice = () => {
   const randomNumber = Math.floor(Math.random() * 3);
   if (randomNumber === 0) {
+    imgPlayerTwo.src = "./img/rock.png";
     computerChoice = "rock";
-    console.log(`Computer choice is: ${computerChoice}`);
+    computerText.textContent = "Rock";
   } else if (randomNumber === 1) {
+    imgPlayerTwo.src = "./img/paper.png";
     computerChoice = "paper";
-    console.log(`Computer choice is: ${computerChoice}`);
+    computerText.textContent = "Paper";
   } else {
+    imgPlayerTwo.src = "./img/scissors.png";
     computerChoice = "scissors";
-    console.log(`Computer choice is: ${computerChoice}`);
+    computerText.textContent = "Scissors";
   }
 };
 
-const getCurrentScore = () => {
-  console.log(`COMPUTER SCORE IS: ${computerScore}`);
-  console.log(`YOUR SCORE IS: ${humanScore}`);
+const isATie = () => {
+  annoucementTitle.textContent = "IT'S A TIE!";
+  annoucementTitle.style.backgroundColor = "orange";
+  numberOfRounds++;
+  nextStep();
 };
 
-function playGame() {
-  function playRound() {
-    getHumanChoice();
-    getComputerChoice();
-    if (humanChoice === "rock" && computerChoice === "rock") {
-      console.log("IT'S A MATCH YOU BOTH CHOICE ROCK");
-      getCurrentScore();
-    } else if (humanChoice === "rock" && computerChoice === "paper") {
-      console.error("YOU LOOSE PAPERS BEATS ROCK!");
-      computerScore++;
-      getCurrentScore();
-    } else if (humanChoice === "rock" && computerChoice === "scissors") {
-      console.log("YOU WIN!! ROCK BEAT SCISSORS");
-      humanScore++;
-      getCurrentScore();
-    } else if (humanChoice === "paper" && computerChoice === "rock") {
-      console.log("YOU WIN!! PAPER BEATS ROCK");
-      humanScore++;
-      getCurrentScore();
-    } else if (humanChoice === "paper" && computerChoice === "paper") {
-      console.log("IT'S A MATCH YOU BOTH CHOICE PAPER");
-      getCurrentScore();
-    } else if (humanChoice === "paper" && computerChoice === "scissors") {
-      console.error("YOU LOOSE!! SCISSORS BEAT PAPER");
-      computerScore++;
-      getCurrentScore();
-    } else if (humanChoice === "scissors" && computerChoice === "rock") {
-      console.error("YOU LOOSE!! ROCK BEATS SCISSORS");
-      computerScore++;
-      getCurrentScore();
-    } else if (humanChoice === "scissors" && computerChoice === "paper") {
-      console.log("YOU WIN!! SCISSORS BEATS PAPER");
-      humanScore++;
-      getCurrentScore();
-    } else if (humanChoice === "scissors" && computerChoice === "scissors") {
-      console.log("IT'S A MATCH YOU BOTH CHOICE PAPER");
-      getCurrentScore();
-    }
-  }
-  playRound();
-  playRound();
-  playRound();
-  playRound();
-  playRound();
-}
+const computerWins = () => {
+  computerScore++;
+  scorePlayerTwo.textContent = computerScore;
+  annoucementTitle.textContent = "YOU LOOSE!";
+  annoucementTitle.style.backgroundColor = "red";
+  numberOfRounds++;
+  nextStep();
+};
 
-playGame();
+const userWins = () => {
+  humanScore++;
+  scorePlayerOne.textContent = humanScore;
+  annoucementTitle.textContent = "YOU WIN!";
+  annoucementTitle.style.backgroundColor = "green";
+  numberOfRounds++;
+  nextStep();
+};
+
+const checkWinner = () => {
+  if (humanChoice === "rock" && computerChoice === "rock") {
+    isATie();
+  } else if (humanChoice === "rock" && computerChoice === "paper") {
+    computerWins();
+  } else if (humanChoice === "rock" && computerChoice === "scissors") {
+    userWins();
+  } else if (humanChoice === "paper" && computerChoice === "rock") {
+    userWins();
+  } else if (humanChoice === "paper" && computerChoice === "paper") {
+    isATie();
+  } else if (humanChoice === "paper" && computerChoice === "scissors") {
+    computerWins();
+  } else if (humanChoice === "scissors" && computerChoice === "rock") {
+    computerWins();
+  } else if (humanChoice === "scissors" && computerChoice === "paper") {
+    userWins();
+  } else if (humanChoice === "scissors" && computerChoice === "scissors") {
+    isATie();
+  }
+};
+
+const disabledBtns = () => {
+  rockBtn.disabled = true;
+  paperBtn.disabled = true;
+  scissorsBtn.disabled = true;
+};
